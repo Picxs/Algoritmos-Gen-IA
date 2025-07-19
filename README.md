@@ -17,10 +17,9 @@ Este projeto aplica **Algoritmos Genéticos (AGs)** para resolver o **Problema d
 
 ### 📂 Estrutura do Projeto
 
-* `main.py`: Executa o algoritmo com os parâmetros definidos.
-* `genetic_algorithms.py`: Implementação das variações dos AGs.
-* `experiments/`: Scripts para executar cada experimento solicitado no trabalho.
-* `results/`: Armazena os gráficos e dados gerados.
+* `Parte-x/`: Executa o algoritmo com os parâmetros definidos.
+* `Parte-x/AGpartx.py`: Implementação das variações dos AGs.
+* `Parte-x/Results/`: Armazena os gráficos e dados gerados.
 * `README.md`: Este arquivo.
 
 ---
