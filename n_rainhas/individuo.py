@@ -7,8 +7,9 @@ class Individuo:
     é a linha da rainha.
     """
 
-    #TODO o n tem que ser maior ou igual a 4
     def __init__(self, n, genes=None):
+        if n < 4:
+            raise ValueError("Para n-rainhas, n deve ser ≥ 4")
         self.n = n
         if genes is None:
             # Gera uma permutação aleatória de 0 a n-1
