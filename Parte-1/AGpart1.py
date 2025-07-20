@@ -127,5 +127,8 @@ def algoritmo_genetico(n, tamanho_pop=200, taxa_mutacao=0.15, max_geracoes=10000
     return None
 
 if __name__ == "__main__":
-    n = 8  # Tamanho do tabuleiro (n x n)
-    algoritmo_genetico(n)
+    n = 3  # Tamanho do tabuleiro (n x n)
+    if n < 4:
+        print("selecione um n >= 4")
+    else: 
+        algoritmo_genetico(n)

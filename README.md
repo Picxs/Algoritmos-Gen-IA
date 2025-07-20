@@ -1,7 +1,3 @@
-Perfeito! Aqui está um **README direto** para o trabalho, pronto para ser usado:
-
----
-
 # 🧬 Trabalho 2 – Algoritmos Genéticos
 
 ### 📖 Descrição
