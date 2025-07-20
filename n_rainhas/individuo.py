@@ -31,6 +31,7 @@ class Individuo:
         conflitos = 0
         for i in range(n):
             for j in range(i + 1, n):
+                # Verifica se as rainhas estão na mesma linha ou diagonal
                 if self.genes[i] == self.genes[j] or abs(self.genes[i] - self.genes[j]) == abs(i - j):
                     conflitos += 1
         self.conflitos = conflitos
