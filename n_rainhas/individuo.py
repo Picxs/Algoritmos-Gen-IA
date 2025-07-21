@@ -18,7 +18,7 @@ class Individuo:
         else:
             if len(genes) != n:
                 raise ValueError(f"Genes deve ter tamanho {n}")
-        self.genes = genes.copy()
+            self.genes = genes.copy()
         self.conflitos = None
         self.fitness_value = None
 

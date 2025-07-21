@@ -1,5 +1,5 @@
 import random
-from .individuo import Individuo
+from individuo import Individuo
 
 class Populacao:
     """Gerencia uma população de indivíduos/tabuleiros."""
@@ -11,11 +11,8 @@ class Populacao:
         self.individuos = []
 
     def inicializa(self):
-    """Gera a população inicial com indivíduos aleatórios."""
-    self.individuos = []
-    for _ in range(self.tamanho):
-        novo = Individuo(self.n)
-        self.individuos.append(novo)
+        """Gera a população inicial com indivíduos aleatórios."""
+        self.individuos = [Individuo(self.n) for _ in range(self.tamanho)]
 
     def avalia(self):
         """Avalia o fitness de todos os indivíduos da população."""
@@ -29,7 +26,6 @@ class Populacao:
             key=lambda ind: ind.fitness_value if ind.fitness_value is not None else ind.fitness()
         )
 
-    # Permite a duplicação dos mais aptos pelo elitismo e clonagem no crossover
     def gera_nova_geracao(
         self,
         selecao,
@@ -37,7 +33,8 @@ class Populacao:
         p_crossover,
         mutacao,
         p_mutacao,
-        elitismo
+        elitismo,
+        elitismo_args=None
     ):
         """
         Aplica seleção, crossover, mutação e elitismo para formar a próxima geração.
@@ -48,20 +45,22 @@ class Populacao:
         - p_crossover: float, probabilidade de aplicar crossover
         - mutacao: função(ind) -> None (altera o indivíduo)
         - p_mutacao: float, probabilidade de mutação
-        - elitismo: função(população) -> lista de indivíduos elitistas
+        - elitismo: função(população[, **args]) -> lista de indivíduos elitistas
+        - elitismo_args: dict de parâmetros para elitismo (opcional)
         """
-        # Seleciona elites e inicializa nova população
-        elites = elitismo(self.individuos)
+        # Obtém elites, passando args se houver
+        if elitismo_args:
+            elites = elitismo(self.individuos, **elitismo_args)
+        else:
+            elites = elitismo(self.individuos)
         nova_pop = elites.copy()
 
-        # Geração de novos indivíduos
         while len(nova_pop) < self.tamanho:
             pai1, pai2 = selecao(self.individuos)
-            # Crossover
+            # Crossover ou clonagem
             if random.random() < p_crossover:
                 f1, f2 = crossover(pai1, pai2)
             else:
-                # clones
                 f1 = Individuo(self.n, pai1.genes)
                 f2 = Individuo(self.n, pai2.genes)
             # Mutação
@@ -71,11 +70,9 @@ class Populacao:
                 mutacao(f2)
             nova_pop.extend([f1, f2])
 
-        # Ajusta tamanho e avalia
         self.individuos = nova_pop[:self.tamanho]
         self.avalia()
 
-    # Não permite a duplicação dos mais aptos pelo elitismo e clonagem no crossover, deixa apenas no elitismo
     def gera_nova_geracao2(
         self,
         selecao,
@@ -83,10 +80,11 @@ class Populacao:
         p_crossover,
         mutacao,
         p_mutacao,
-        elitismo
+        elitismo,
+        elitismo_args=None
     ):
         """
-        Aplica seleção, crossover, mutação e elitismo para formar a próxima geração.
+        Variante sem permitir duplicação dos elitistas via seleção e clonagem.
 
         Parâmetros:
         - selecao: função(população) -> (pai1, pai2)
@@ -94,20 +92,21 @@ class Populacao:
         - p_crossover: float, probabilidade de aplicar crossover
         - mutacao: função(ind) -> None (altera o indivíduo)
         - p_mutacao: float, probabilidade de mutação
-        - elitismo: função(população) -> lista de indivíduos elitistas
+        - elitismo: função(população[, **args]) -> lista de indivíduos elitistas
+        - elitismo_args: dict de parâmetros para elitismo (opcional)
         """
-        # Seleciona elites e inicializa nova população
-        elites = elitismo(self.individuos)
-        new_pop = elites.copy()
+        if elitismo_args:
+            elites = elitismo(self.individuos, **elitismo_args)
+        else:
+            elites = elitismo(self.individuos)
+        nova_pop = elites.copy()
 
-        # Prepara pool de seleção sem os elites
+        # Pool sem elites para seleção
         pool = [ind for ind in self.individuos if ind not in elites]
         if not pool:
-            # Se todos são elites, volta para toda população
             pool = self.individuos.copy()
 
-        # Gera novos indivíduos até preencher população
-        while len(new_pop) < self.tamanho:
+        while len(nova_pop) < self.tamanho:
             pai1, pai2 = selecao(pool)
             # Crossover ou clonagem
             if random.random() < p_crossover:
@@ -120,8 +119,7 @@ class Populacao:
                 mutacao(f1)
             if random.random() < p_mutacao:
                 mutacao(f2)
-            new_pop.extend([f1, f2])
+            nova_pop.extend([f1, f2])
 
-        # Ajusta para o tamanho e avalia
-        self.individuos = new_pop[:self.tamanho]
+        self.individuos = nova_pop[:self.tamanho]
         self.avalia()

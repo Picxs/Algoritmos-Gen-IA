@@ -1,0 +1,12 @@
+{
+  "n": 8,
+  "pop_size": 100,
+  "max_gens": 500,
+  "seed": 42,
+  "selecao": "torneio",
+  "crossover": "ponto_unico",
+  "mutacao": "swap",
+  "elitismo": "percentual",
+  "p_crossover": 0.8,
+  "p_mutacao": 0.1
+}
