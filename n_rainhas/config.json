@@ -1,7 +1,7 @@
 {
-  "n": 8,
+  "n": 100,
   "pop_size": 100,
-  "max_gens": 500,
+  "max_gens": 1000,
   "seed": 42,
   "selecao": "torneio",
   "crossover": "ponto_unico",
