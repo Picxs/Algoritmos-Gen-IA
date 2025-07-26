@@ -36,7 +36,7 @@ for csv_path in csv_files:
     if 'gens_to_solve' in df.columns:
         df_solved = df[df['solved'] == True]
         if not df_solved.empty:
-            summary_gens = df_solved.groupby(['n','variant'])['gens_to_solve'].mean().unstack()
+            summary_gens = df_solved.groupby(['n', 'variant'])['gens_to_solve'].mean().unstack()
             plt.figure(figsize=(8, 5))
             for var in summary_gens.columns:
                 plt.plot(summary_gens.index, summary_gens[var], marker='o', label=var)
@@ -54,7 +54,7 @@ for csv_path in csv_files:
 
     # ----- 3) Taxa de sucesso por variante e n -----
     if 'solved' in df.columns:
-        success_rate = df.groupby(['n','variant'])['solved'].mean().unstack()
+        success_rate = df.groupby(['n', 'variant'])['solved'].mean().unstack()
         plt.figure(figsize=(8, 5))
         for var in success_rate.columns:
             plt.plot(success_rate.index, success_rate[var], marker='o', label=var)
@@ -67,5 +67,37 @@ for csv_path in csv_files:
         plt.savefig(rate_line_file)
         plt.close()
         print('Gerado:', rate_line_file)
+
+    # ----- 4) Tempo de execução total por variante e n -----
+    if 'tempo' in df.columns:
+        time_summary = df.groupby(['n', 'variant'])['tempo'].mean().unstack()
+        plt.figure(figsize=(8, 5))
+        for var in time_summary.columns:
+            plt.plot(time_summary.index, time_summary[var], marker='o', label=var)
+        plt.title(f"{comp.capitalize()} – Tempo Médio de Execução vs n")
+        plt.xlabel('Tamanho do tabuleiro (n)')
+        plt.ylabel('Tempo Médio de Execução (segundos)')
+        plt.legend(title='Variante')
+        plt.tight_layout()
+        time_line_file = os.path.join(OUTPUT_DIR, f'{comp}_time_line.png')
+        plt.savefig(time_line_file)
+        plt.close()
+        print('Gerado:', time_line_file)
+
+    # ----- 5) Desvio padrão de gens_to_solve por variante e n -----
+    if 'gens_to_solve' in df.columns:
+        std_deviation = df.groupby(['n', 'variant'])['gens_to_solve'].std().unstack()
+        plt.figure(figsize=(8, 5))
+        for var in std_deviation.columns:
+            plt.plot(std_deviation.index, std_deviation[var], marker='o', label=var)
+        plt.title(f"{comp.capitalize()} – Desvio Padrão de Gerações até Solução")
+        plt.xlabel('Tamanho do Tabuleiro (n)')
+        plt.ylabel('Desvio Padrão das Gerações')
+        plt.legend(title='Variante')
+        plt.tight_layout()
+        std_deviation_file = os.path.join(OUTPUT_DIR, f'{comp}_std_deviation.png')
+        plt.savefig(std_deviation_file)
+        plt.close()
+        print('Gerado:', std_deviation_file)
 
 print('Visualização concluída! Abra os PNGs em', OUTPUT_DIR)
