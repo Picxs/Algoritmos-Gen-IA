@@ -4,7 +4,6 @@ import time
 import csv
 import statistics
 import random
-from teste import executar_ag
 from operadores import (
     selecao_torneio,
     crossover_pmx,
