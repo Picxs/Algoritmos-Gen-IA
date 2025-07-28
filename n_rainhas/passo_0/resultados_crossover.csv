@@ -1,4 +1,0 @@
-p_crossover,tempo,max_fitness,mean_fitness,min_fitness,gens_to_solve,solved
-0.6,44.46308898925781,4950,4948.716,4944,152,True
-0.8,54.83034348487854,4950,4948.854,4945,187,True
-1.0,146.51510167121887,4949,4948.87,4944,,False
