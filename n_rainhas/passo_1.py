@@ -10,7 +10,6 @@ from operadores import (
     selecao_torneio, selecao_truncamento, crossover_pmx, mutacao_swap, elitismo_percentual
 )
 
-# Configuração básica do experimento para 10 Rainhas
 BASE_CONFIG = {
     'n': 10,  # Número de rainhas (10)
     'pop_size': 150,  # Tamanho da população
@@ -23,16 +22,16 @@ BASE_CONFIG = {
     'elitismo': elitismo_percentual,  # Operador de elitismo
 }
 
-# Função para rodar o experimento variando o operador de seleção
+
 def experimenta_com_selecao():
-    selecoes = [selecao_torneio, selecao_truncamento]  # Seleção por torneio e seleção por truncamento
+    selecoes = [selecao_torneio, selecao_truncamento]  
     resultados = []  # Para armazenar os resultados de cada experimento
 
     for selecao_func in selecoes:
         cfg = BASE_CONFIG.copy()
-        cfg['selecao'] = selecao_func  # Variando a seleção
+        cfg['selecao'] = selecao_func  
         
-        for i in range(20):  # Repetir 20 vezes
+        for i in range(20):  
             print(f"Executando experimento {i+1} com {selecao_func.__name__}...")
             start = time.time()
             stats = run_experiment(cfg)  # Rodando o experimento
@@ -75,7 +74,7 @@ def run_experiment(cfg):
     
     # Passando o argumento "taxa" se o elitismo for percentual
     if elitismo_func == elitismo_percentual:
-        elitismo_args = {'taxa': 0.1}  # Exemplo de taxa de 10%
+        elitismo_args = {'taxa': 0.1}  
     else:
         elitismo_args = {}
 
@@ -105,7 +104,7 @@ def run_experiment(cfg):
             mutacao=mutacao,
             p_mutacao=cfg['p_mutacao'],
             elitismo=elitismo_func,
-            elitismo_args=elitismo_args  # Passando elitismo_args aqui
+            elitismo_args=elitismo_args  
         )
         fitness_vals = [ind.fitness_value for ind in pop.individuos]
         
@@ -133,5 +132,5 @@ def run_experiment(cfg):
         'solved': False
     }
 
-# Rodar o experimento variando a seleção
-experimenta_com_selecao()  # Variando o operador de seleção
+
+experimenta_com_selecao()  

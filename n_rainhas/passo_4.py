@@ -10,7 +10,7 @@ from operadores import (
     elitismo_fixo, crossover_pmx, mutacao_swap, elitismo_percentual, selecao_torneio, mutacao_scramble
 )
 
-# Configuração básica do experimento para 10 Rainhas
+
 BASE_CONFIG = {
     'n': 10,  # Número de rainhas (10)
     'pop_size': 150,  # Tamanho da população
@@ -27,16 +27,16 @@ BASE_CONFIG = {
 
 def experimenta_com_mutacao():
     mutacoes = [mutacao_swap, mutacao_scramble]  # Swap e Scramble
-    resultados = []  # Para armazenar os resultados de cada experimento
+    resultados = []  
 
     for mutacao_func in mutacoes:
         cfg = BASE_CONFIG.copy()
         cfg['mutacao'] = mutacao_func  # Variando a mutação
         
-        for i in range(20):  # Repetir 20 vezes
+        for i in range(20):  
             print(f"Executando experimento {i+1} com {mutacao_func.__name__}...")
             start = time.time()
-            stats = run_experiment(cfg)  # Rodando o experimento
+            stats = run_experiment(cfg)
             duration = time.time() - start
             
             # Exibindo no console os resultados de cada execução
@@ -65,7 +65,7 @@ def run_experiment(cfg):
     Roda o experimento com a configuração fornecida e retorna as estatísticas.
     Essa função depende da implementação dos seus algoritmos genéticos.
     """
-    n = cfg['n']  # Agora temos o valor de n para 10 rainhas
+    n = cfg['n']  
     pop_size = cfg['pop_size']
     max_gens = cfg['max_gens']
     selecao = cfg['selecao']
@@ -76,12 +76,11 @@ def run_experiment(cfg):
     if elitismo_func == elitismo_percentual:
         elitismo_args = {'taxa': 0.1}
     elif elitismo_func == elitismo_fixo:
-        elitismo_args = {'k': 2}  # ou outro valor desejado para o número fixo de elites
+        elitismo_args = {'k': 2}  
     else:
         elitismo_args = {}
 
 
-    # Criar a população
     pop = Populacao(n, pop_size)
     pop.inicializa()
     pop.avalia()
@@ -107,7 +106,7 @@ def run_experiment(cfg):
             mutacao=mutacao,
             p_mutacao=cfg['p_mutacao'],
             elitismo=elitismo_func,
-            elitismo_args=elitismo_args  # Passando elitismo_args aqui
+            elitismo_args=elitismo_args  
         )
         fitness_vals = [ind.fitness_value for ind in pop.individuos]
         
@@ -135,5 +134,4 @@ def run_experiment(cfg):
         'solved': False
     }
 
-# Rodar o experimento variando a seleção
-experimenta_com_mutacao()  # Variando o operador de seleção
+experimenta_com_mutacao()  

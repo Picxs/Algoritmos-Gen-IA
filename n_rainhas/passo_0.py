@@ -29,7 +29,6 @@ def rodar_experimento_parte0():
     """Orquestra a execução, salva o CSV detalhado e imprime um resumo."""
     nome_arquivo_csv = 'resultados_parte0.csv'
     
-    # Cabeçalho em português
     cabecalho_csv = [
         "componente", "variante", "n_rainhas", "semente", "tempo_s", 
         "fitness_maximo", "fitness_medio", "fitness_minimo", 
@@ -53,7 +52,7 @@ def rodar_experimento_parte0():
                             config_str = f"Pop={tam_pop}, Ger={n_geracoes}, pC={p_crossover}, pM={p_mutacao}, Elite%={taxa_elitismo}"
                             print(f"\n--- Testando Configuração: {config_str} ---")
                             
-                            medias = []  # Lista para armazenar os fitness médios dessa configuração
+                            medias = []
                             
                             for i in range(N_EXECUCOES):
                                 semente_atual = random.randint(0, 100000)
@@ -86,7 +85,6 @@ def rodar_experimento_parte0():
                                     resultados['solucionado']
                                 ])
 
-                            # Após as N_EXECUCOES, calcula o fitness médio da configuração
                             media_geral = statistics.mean(medias)
 
                             if media_geral > melhor_fitness_medio:

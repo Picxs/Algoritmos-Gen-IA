@@ -65,6 +65,10 @@ BASE_CONFIG_SELE = {
 }
 
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+TEMPO_LIMITE = 600  # 10 minutos
+
 # Função para criar uma cópia com valor n atualizado
 def atualizar_config(base_cfg, n):
     cfg = base_cfg.copy()
@@ -75,9 +79,14 @@ def atualizar_config(base_cfg, n):
 def run_experiment_wrapper(args):
     base_cfg, nome_base = args
     n = base_cfg['n']
-    resultado_final = None
+    start_global = time.time()
 
     while True:
+        # Checar se o tempo limite foi excedido
+        if time.time() - start_global > TEMPO_LIMITE:
+            print(f"[{nome_base}] Tempo limite de execução atingido. Encerrando...")
+            break
+
         cfg = atualizar_config(base_cfg, n)
         result = run_experiment(cfg)
         salvar_resultado_em_csv({
@@ -85,8 +94,12 @@ def run_experiment_wrapper(args):
             'n': n,
             **result
         })
+
+        # Incrementa n se resolveu ou atingiu o limite de gerações
         if result['solved'] or cfg['max_gens'] == result.get('gens_to_solve', cfg['max_gens']):
             n += 1
+        else:
+            break  # Ou continue para testar o mesmo n novamente
 
 # Salvar resultados incrementalmente em CSV
 def salvar_resultado_em_csv(dados, filename='resultados_variacoes.csv'):
@@ -176,5 +189,3 @@ if __name__ == "__main__":
     # Executar em paralelo
     with multiprocessing.Pool(processes=4) as pool:
         pool.map(run_experiment_wrapper, configs)
-
-
